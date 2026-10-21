@@ -1,0 +1,675 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Projeto Canadá — Rafael + Eric</title>
+<style>
+:root{
+  --bg:#0b1020;--bg2:#121933;--card:#171f3d;--card2:#1d2750;--line:#2a3566;
+  --txt:#eef1ff;--mut:#a5afd6;--red:#ff3b4e;--red2:#ff6b7a;--gold:#ffc857;--green:#3ddc97;--blue:#5aa9ff;--warn:#ff9f43;
+  --r:18px;--shadow:0 10px 30px rgba(0,0,0,.35);
+}
+:root[data-theme="light"]{
+  --bg:#f3f5fb;--bg2:#ffffff;--card:#ffffff;--card2:#eef1fb;--line:#d9dfef;--txt:#141a33;--mut:#5a6488;--shadow:0 8px 24px rgba(20,26,51,.10);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--txt);line-height:1.6;min-height:100vh}
+body::before{content:"";position:fixed;inset:0;z-index:-1;background:
+ radial-gradient(900px 500px at 10% -10%,rgba(255,59,78,.18),transparent 60%),
+ radial-gradient(800px 500px at 100% 10%,rgba(90,169,255,.15),transparent 60%),var(--bg)}
+a{color:var(--blue)}
+h1,h2,h3{line-height:1.2}
+.hidden{display:none!important}
+
+/* LOGIN */
+#lock{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;padding:20px;background:var(--bg)}
+#lock::before{content:"";position:absolute;inset:0;background:
+ radial-gradient(700px 400px at 20% 20%,rgba(255,59,78,.28),transparent 60%),
+ radial-gradient(700px 400px at 80% 80%,rgba(90,169,255,.22),transparent 60%)}
+.lockbox{position:relative;width:100%;max-width:410px;background:var(--card);border:1px solid var(--line);border-radius:24px;padding:36px 30px;text-align:center;box-shadow:var(--shadow)}
+.lockbox .leaf{font-size:54px}
+.lockbox h1{font-size:1.6rem;margin:10px 0 4px}
+.lockbox p{color:var(--mut);font-size:.95rem;margin-bottom:22px}
+.lockbox input{width:100%;padding:14px 16px;border-radius:12px;border:1px solid var(--line);background:var(--bg2);color:var(--txt);font-size:1rem;text-align:center;letter-spacing:.2em;outline:none}
+.lockbox input:focus{border-color:var(--red)}
+.btn{display:inline-block;border:0;cursor:pointer;background:linear-gradient(135deg,var(--red),#d6203a);color:#fff;font-weight:700;padding:13px 22px;border-radius:12px;font-size:1rem;transition:.2s;font-family:inherit}
+.btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(255,59,78,.35)}
+.btn.ghost{background:transparent;border:1px solid var(--line);color:var(--txt)}
+.btn.ghost:hover{box-shadow:none;border-color:var(--red)}
+.btn.sm{padding:8px 14px;font-size:.85rem;border-radius:10px}
+.lockbox .btn{width:100%;margin-top:12px}
+#err{color:var(--red2);min-height:22px;margin-top:10px;font-size:.9rem}
+.shake{animation:shake .4s}
+@keyframes shake{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+
+/* LAYOUT */
+header.top{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--bg) 85%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.nav{max-width:1180px;margin:auto;display:flex;align-items:center;gap:14px;padding:10px 20px}
+.brand{font-weight:800;white-space:nowrap}
+.brand span{color:var(--red)}
+.links{display:flex;gap:4px;overflow-x:auto;flex:1;scrollbar-width:none}
+.links::-webkit-scrollbar{display:none}
+.links a{color:var(--mut);text-decoration:none;font-size:.85rem;padding:7px 11px;border-radius:9px;white-space:nowrap;font-weight:600}
+.links a:hover,.links a.act{background:var(--card2);color:var(--txt)}
+.iconbtn{background:var(--card);border:1px solid var(--line);color:var(--txt);border-radius:10px;padding:7px 10px;cursor:pointer;font-size:1rem}
+main{max-width:1180px;margin:auto;padding:0 20px 80px}
+section{padding-top:70px}
+.eyebrow{color:var(--red2);font-weight:800;font-size:.78rem;letter-spacing:.14em;text-transform:uppercase}
+h2{font-size:clamp(1.6rem,3vw,2.2rem);margin:6px 0 8px}
+.sub{color:var(--mut);max-width:760px;margin-bottom:26px}
+
+/* HERO */
+.hero{padding-top:50px;display:grid;grid-template-columns:1.3fr 1fr;gap:30px;align-items:center}
+.hero h1{font-size:clamp(2rem,5vw,3.4rem);letter-spacing:-.02em}
+.hero h1 em{font-style:normal;background:linear-gradient(90deg,var(--red),var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{color:var(--mut);margin:14px 0 22px;font-size:1.05rem}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px}
+.chip{background:var(--card);border:1px solid var(--line);padding:6px 12px;border-radius:99px;font-size:.82rem;font-weight:600}
+.herocard{background:linear-gradient(160deg,var(--card2),var(--card));border:1px solid var(--line);border-radius:24px;padding:24px;box-shadow:var(--shadow)}
+.herocard h3{font-size:.85rem;color:var(--mut);text-transform:uppercase;letter-spacing:.1em}
+.big{font-size:2.4rem;font-weight:800;margin:6px 0}
+.big small{font-size:1rem;color:var(--mut);font-weight:600}
+
+/* GRIDS & CARDS */
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(2,1fr)}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g4{grid-template-columns:repeat(4,1fr)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:20px;box-shadow:var(--shadow)}
+.card h3{font-size:1.05rem;margin-bottom:8px}
+.card p,.card li{color:var(--mut);font-size:.94rem}
+.card ul{padding-left:18px}
+.stat .n{font-size:1.8rem;font-weight:800}
+.stat .l{color:var(--mut);font-size:.85rem}
+.tag{display:inline-block;font-size:.72rem;font-weight:800;padding:3px 9px;border-radius:99px;background:rgba(61,220,151,.15);color:var(--green)}
+.tag.r{background:rgba(255,59,78,.15);color:var(--red2)}
+.tag.y{background:rgba(255,200,87,.15);color:var(--gold)}
+.tag.b{background:rgba(90,169,255,.15);color:var(--blue)}
+
+.alert{border-left:4px solid var(--warn);background:rgba(255,159,67,.1);padding:14px 18px;border-radius:12px;margin:16px 0;color:var(--txt);font-size:.93rem}
+.alert.red{border-color:var(--red);background:rgba(255,59,78,.1)}
+.alert.green{border-color:var(--green);background:rgba(61,220,151,.1)}
+.alert b{color:inherit}
+
+/* TABLES */
+.tw{overflow-x:auto;border-radius:var(--r);border:1px solid var(--line)}
+table{width:100%;border-collapse:collapse;background:var(--card);font-size:.92rem}
+th,td{padding:11px 14px;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap}
+th{background:var(--card2);font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;color:var(--mut)}
+tr:last-child td{border-bottom:0}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+tfoot td{font-weight:800;background:var(--card2)}
+td input,td select{background:var(--bg2);color:var(--txt);border:1px solid var(--line);border-radius:8px;padding:6px 8px;font-family:inherit;width:100%;min-width:90px}
+
+/* CALC */
+.calc{display:grid;grid-template-columns:340px 1fr;gap:18px}
+.field{margin-bottom:12px}
+.field label{display:block;font-size:.8rem;color:var(--mut);font-weight:700;margin-bottom:4px}
+.field input{width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:var(--bg2);color:var(--txt);font-size:.95rem;font-family:inherit}
+.field input:focus{outline:none;border-color:var(--red)}
+.field input[type=range]{padding:0;accent-color:var(--red)}
+.result-row{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px dashed var(--line);font-size:.95rem}
+.result-row:last-child{border:0}
+.result-row b{font-variant-numeric:tabular-nums}
+.result-row.total{font-size:1.1rem;color:var(--gold)}
+.pbar{height:14px;background:var(--bg2);border-radius:99px;overflow:hidden;border:1px solid var(--line)}
+.pbar>div{height:100%;background:linear-gradient(90deg,var(--red),var(--gold));width:0;transition:.5s}
+.bars .brow{display:grid;grid-template-columns:130px 1fr 90px;gap:10px;align-items:center;margin:8px 0;font-size:.88rem}
+.bars .bt{height:18px;background:var(--bg2);border-radius:99px;overflow:hidden}
+.bars .bt i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--blue),var(--green))}
+
+/* TIMELINE */
+.tl{position:relative;padding-left:30px}
+.tl::before{content:"";position:absolute;left:10px;top:0;bottom:0;width:3px;background:linear-gradient(var(--red),var(--blue));border-radius:3px}
+.tli{position:relative;margin-bottom:16px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 18px}
+.tli::before{content:"";position:absolute;left:-28px;top:20px;width:15px;height:15px;border-radius:50%;background:var(--bg);border:3px solid var(--red)}
+.tli h3{font-size:1rem}
+.tli p{color:var(--mut);font-size:.9rem}
+
+/* CHECKLIST */
+.ck{list-style:none;padding:0!important}
+.ck li{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px dashed var(--line)}
+.ck input{margin-top:5px;accent-color:var(--green);width:17px;height:17px}
+.ck li.done span{text-decoration:line-through;opacity:.5}
+.ck li:last-child{border:0}
+
+/* FAQ */
+details{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 18px;margin-bottom:10px}
+summary{cursor:pointer;font-weight:700}
+details p{color:var(--mut);margin-top:10px;font-size:.93rem}
+
+.flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.flow .s{background:var(--card);border:1px solid var(--line);padding:8px 14px;border-radius:10px;font-size:.85rem;font-weight:600}
+.flow .a{color:var(--red2);font-weight:800}
+
+footer{border-top:1px solid var(--line);padding:30px 20px;text-align:center;color:var(--mut);font-size:.85rem}
+.tabs{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+.tabs button{background:var(--card);border:1px solid var(--line);color:var(--mut);padding:8px 16px;border-radius:99px;cursor:pointer;font-weight:700;font-family:inherit}
+.tabs button.on{background:var(--red);border-color:var(--red);color:#fff}
+
+@media(max-width:900px){
+  .hero,.calc{grid-template-columns:1fr}
+  .g3,.g4{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:600px){
+  .g2,.g3,.g4{grid-template-columns:1fr}
+  .brand{display:none}
+  .bars .brow{grid-template-columns:90px 1fr 70px}
+}
+@media print{#lock,header.top,.iconbtn,.btn{display:none!important}body{background:#fff;color:#000}}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="lock">
+  <form class="lockbox" id="lockForm" autocomplete="off">
+    <div class="leaf">🍁</div>
+    <h1>Projeto Canadá</h1>
+    <p>Área privada de Rafael &amp; Eric.<br>Digite a senha para entrar.</p>
+    <input type="password" id="pw" placeholder="••••••••" autofocus>
+    <div id="err"></div>
+    <button class="btn" type="submit">Entrar</button>
+  </form>
+</div>
+
+<div id="app" class="hidden">
+<header class="top">
+  <div class="nav">
+    <div class="brand">🍁 Rafael <span>+</span> Eric</div>
+    <nav class="links" id="links">
+      <a href="#resumo">Resumo</a>
+      <a href="#tuition">Tuition</a>
+      <a href="#calculadora">Calculadora</a>
+      <a href="#despesas">Despesas</a>
+      <a href="#visto">Visto</a>
+      <a href="#trabalho">Trabalho</a>
+      <a href="#metas">Metas</a>
+      <a href="#cursos">Cursos</a>
+      <a href="#colleges">Comparador</a>
+      <a href="#roteiro">Roteiro</a>
+      <a href="#docs">Documentos</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <button class="iconbtn" id="theme" title="Tema">🌙</button>
+    <button class="iconbtn" id="logout" title="Sair">🔒</button>
+  </div>
+</header>
+
+<main>
+
+<!-- HERO -->
+<section class="hero" id="resumo" style="padding-top:50px">
+  <div>
+    <div class="eyebrow">Plano econômico · College público · 2026–27</div>
+    <h1>Estudar no Canadá <em>gastando o mínimo</em> possível.</h1>
+    <p>Informativo pessoal de Rafael e Eric: college em vez de universidade cara, cidade pequena, despesas individuais separadas, aluguel calculado à parte e um caminho claro até o Study Permit.</p>
+    <div class="chips">
+      <span class="chip">🏫 NBCC</span><span class="chip">📍 New Brunswick</span><span class="chip">🏙️ Miramichi (1ª a investigar)</span>
+      <span class="chip">💼 Até 24 h/sem de trabalho</span><span class="chip">🎓 Foco em PGWP</span>
+    </div>
+    <a class="btn" href="#calculadora">Abrir calculadora</a>
+    <a class="btn ghost" href="#roteiro" style="margin-left:8px">Ver roteiro</a>
+  </div>
+  <div class="herocard">
+    <h3>Tuition internacional NBCC 2026–27</h3>
+    <div class="big">CAD 10.260 <small>/ano</small></div>
+    <p style="margin:0 0 14px">≈ <b id="heroBRL">R$ 36.628</b> por ano (câmbio configurável)</p>
+    <div class="result-row"><span>Média universitária (graduação)</span><b>CAD 41.746</b></div>
+    <div class="result-row"><span>Economia aproximada</span><b style="color:var(--green)">≈ 75%</b></div>
+    <div class="result-row"><span>Despesas sem aluguel / pessoa</span><b>CAD 620/mês</b></div>
+  </div>
+</section>
+
+<div class="alert">⚠️ <b>Leia isto primeiro:</b> os números abaixo vêm da pesquisa feita em 20/10/2026 e de estimativas de planejamento. O <b>aluguel é um exemplo hipotético</b>, e tuition, taxas, câmbio e regras de imigração mudam. Antes de pagar ou aplicar, confirme tudo nos sites oficiais (NBCC e IRCC, links no fim da página).</div>
+
+<!-- TUITION -->
+<section id="tuition">
+  <div class="eyebrow">Parte 1</div>
+  <h2>💰 A grande vantagem: tuition</h2>
+  <p class="sub">Colleges públicos canadenses costumam custar bem menos que universidades. A NBCC publica CAD 5.130 por semestre para estudantes internacionais.</p>
+  <div class="grid g4">
+    <div class="card stat"><div class="n">CAD 5.130</div><div class="l">por semestre</div></div>
+    <div class="card stat"><div class="n">CAD 10.260</div><div class="l">por ano (2 semestres)</div></div>
+    <div class="card stat"><div class="n" id="t1">R$ 36.628</div><div class="l">por ano em reais</div></div>
+    <div class="card stat"><div class="n" id="t2">R$ 3.052</div><div class="l">por mês (tuition ÷ 12)</div></div>
+  </div>
+  <div class="grid g2" style="margin-top:16px">
+    <div class="card">
+      <h3>📝 Candidatura NBCC</h3>
+      <ul><li>Taxa internacional: <b>CAD 100</b>, não reembolsável, por pessoa</li>
+      <li>Rafael + Eric = <b>CAD 200</b> (≈ <span id="appBRL">R$ 714</span>)</li></ul>
+    </div>
+    <div class="card">
+      <h3>💳 Depósitos para estudantes internacionais</h3>
+      <ul><li>Payment #1: <b>CAD 1.500</b> (não reembolsável)</li>
+      <li>Payment #2: <b>CAD 4.750</b></li>
+      <li>Ambos são abatidos da primeira parcela, então <b>não são taxa extra</b></li></ul>
+    </div>
+  </div>
+</section>
+
+<!-- CALCULADORA -->
+<section id="calculadora">
+  <div class="eyebrow">Parte 2</div>
+  <h2>🧮 Calculadora interativa</h2>
+  <p class="sub">Mude os valores e veja o custo de cada um e dos dois juntos. Tudo fica salvo no seu navegador.</p>
+  <div class="calc">
+    <div class="card">
+      <h3>Parâmetros</h3>
+      <div class="field"><label>Câmbio (R$ por CAD)</label><input type="number" step="0.01" id="c_rate" value="3.57"></div>
+      <div class="field"><label>Tuition anual por pessoa (CAD)</label><input type="number" id="c_tuition" value="10260"></div>
+      <div class="field"><label>Despesas mensais sem aluguel / pessoa (CAD)</label><input type="number" id="c_exp" value="620"></div>
+      <div class="field"><label>Aluguel mensal TOTAL do apartamento (CAD)</label><input type="number" id="c_rent" value="1600"></div>
+      <div class="field"><label>Meses no ano letivo</label><input type="number" id="c_months" value="12" min="1" max="12"></div>
+      <div class="field"><label>Imigração + candidatura por pessoa (CAD)</label><input type="number" id="c_imm" value="335"></div>
+      <div class="field"><label>Passagem + bagagem por pessoa (R$)</label><input type="number" id="c_flight" value="0"></div>
+      <div class="field"><label>Margem de segurança: <span id="c_buf_l">10</span>%</label><input type="range" id="c_buf" min="0" max="40" value="10"></div>
+      <button class="btn ghost sm" id="c_reset">Restaurar padrão</button>
+    </div>
+    <div>
+      <div class="tabs" id="calcTabs">
+        <button class="on" data-v="rafael">Rafael</button>
+        <button data-v="eric">Eric</button>
+        <button data-v="both">Os dois</button>
+      </div>
+      <div class="card" id="calcOut"></div>
+      <div class="card bars" style="margin-top:16px" id="calcBars"></div>
+    </div>
+  </div>
+  <div class="alert">ℹ️ Imigração padrão = Study Permit CAD 150 + biometria CAD 85 + candidatura CAD 100 = <b>CAD 335</b> por pessoa. Passagem fica em zero porque o preço de 2028 ainda não dá para prever — preencha quando pesquisar.</div>
+</section>
+
+<!-- DESPESAS -->
+<section id="despesas">
+  <div class="eyebrow">Parte 3</div>
+  <h2>🧾 Despesas mensais (sem aluguel)</h2>
+  <p class="sub">Estimativa econômica, sem luxo. Rafael e Eric têm a mesma estrutura, mas cada um pode editar a sua. O total atualiza sozinho.</p>
+  <div class="tabs" id="expTabs">
+    <button class="on" data-p="rafael">Rafael</button><button data-p="eric">Eric</button>
+  </div>
+  <div class="tw"><table id="expTable"></table></div>
+  <div class="grid g3" style="margin-top:16px" id="expSum"></div>
+
+  <h3 style="margin:34px 0 10px">🏠 Aluguel (separado da conta principal)</h3>
+  <div class="grid g3">
+    <div class="card"><h3>Exemplo de planejamento</h3><p>Apartamento de <b>CAD 1.600/mês</b> dividido por dois = <b>CAD 800</b> para cada.</p></div>
+    <div class="card"><h3>Por pessoa, por mês</h3><p>CAD 620 de despesas + CAD 800 de aluguel = <b>CAD 1.420</b>.</p></div>
+    <div class="card"><h3>Por pessoa, por ano</h3><p>CAD 17.700 (tuition + despesas) + CAD 9.600 (aluguel) = <b>CAD 27.300</b>.</p></div>
+  </div>
+  <div class="alert">O aluguel real depende de campus, cidade e tipo de moradia. Só deve ser fechado quando vocês escolherem o college e pesquisarem anúncios de verdade.</div>
+</section>
+
+<!-- VISTO -->
+<section id="visto">
+  <div class="eyebrow">Parte 4</div>
+  <h2>🛂 Study Permit e comprovação financeira</h2>
+  <p class="sub">A conta para o visto é diferente da conta do dia a dia. Ter CAD 17.700 não significa automaticamente estar aprovado.</p>
+  <div class="grid g3">
+    <div class="card stat"><div class="n">CAD 23.448</div><div class="l">mínimo de manutenção por pessoa (fora de Quebec, pedidos a partir de 01/09/2026). Não inclui tuition nem transporte.</div></div>
+    <div class="card stat"><div class="n">CAD 150</div><div class="l">taxa do Study Permit, por pessoa</div></div>
+    <div class="card stat"><div class="n">CAD 85</div><div class="l">biometria, quando exigida</div></div>
+  </div>
+  <div class="card" style="margin-top:16px">
+    <h3>Quanto cada um precisa mostrar (referência)</h3>
+    <div class="result-row"><span>Primeiro ano de tuition</span><b>CAD 10.260</b></div>
+    <div class="result-row"><span>Manutenção mínima exigida</span><b>CAD 23.448</b></div>
+    <div class="result-row total"><span>Referência por pessoa (sem passagem)</span><b id="proofCAD">CAD 33.708</b></div>
+    <div class="result-row"><span>Em reais</span><b id="proofBRL">R$ 120.338</b></div>
+    <div class="result-row"><span>Os dois juntos</span><b id="proofBoth">R$ 240.676</b></div>
+  </div>
+  <div class="alert red">🏫 O college precisa ser uma <b>DLI</b> (Designated Learning Institution) verificada na lista oficial do governo. Sem Letter of Acceptance de uma DLI não há Study Permit. Dependendo da província, pode ser exigida também uma PAL/TAL.</div>
+  <div class="alert">🎓 <b>PGWP:</b> formar em uma DLI não garante a permissão de trabalho pós-graduação. Programas que não são de grau precisam estar em campo de estudo elegível. Confira <b>college + programa + regra atual</b> antes de escolher.</div>
+</section>
+
+<!-- TRABALHO -->
+<section id="trabalho">
+  <div class="eyebrow">Parte 5</div>
+  <h2>💼 Trabalho durante o curso</h2>
+  <p class="sub">Estudantes internacionais que cumprem os requisitos podem trabalhar até 24 horas por semana durante as aulas, e mais nas pausas acadêmicas programadas. Só depois de iniciar o curso.</p>
+  <div class="calc">
+    <div class="card">
+      <h3>Simulador de renda</h3>
+      <div class="field"><label>Salário por hora (CAD, bruto)</label><input type="number" id="w_rate" value="17" step="0.5"></div>
+      <div class="field"><label>Horas por semana: <span id="w_h_l">24</span></label><input type="range" id="w_h" min="0" max="24" value="24"></div>
+      <div class="field"><label>Fração do salário que você conta como líquida: <span id="w_net_l">80</span>%</label><input type="range" id="w_net" min="60" max="100" value="80"></div>
+    </div>
+    <div class="card" id="workOut"></div>
+  </div>
+  <div class="alert red">🚫 O salário <b>não pode</b> ser contado como garantia no pedido de visto. A conta precisa fechar sem depender dele — o trabalho serve para aliviar depois da chegada. Salário de CAD 17/h é só simulação, não promessa.</div>
+</section>
+
+<!-- METAS -->
+<section id="metas">
+  <div class="eyebrow">Parte 6</div>
+  <h2>🎯 Meta de poupança</h2>
+  <p class="sub">Três níveis de meta em reais e um planejador para saber quanto guardar por mês até a data de embarque.</p>
+  <div class="grid g3">
+    <div class="card"><span class="tag b">Nível 1</span><h3 style="margin-top:8px">Começar o projeto</h3><div class="n" style="font-size:1.6rem;font-weight:800">R$ 10–20 mil</div><p>Passaporte, teste de inglês, documentos, traduções, candidatura e taxas.</p></div>
+    <div class="card"><span class="tag y">Nível 2</span><h3 style="margin-top:8px">Chegar preparado</h3><div class="n" style="font-size:1.6rem;font-weight:800">R$ 80–100 mil</div><p>Reserva muito mais confortável para o primeiro ano.</p></div>
+    <div class="card"><span class="tag">Nível 3</span><h3 style="margin-top:8px">Primeiro ano completo</h3><div class="n" style="font-size:1.6rem;font-weight:800">R$ 150 mil+</div><p>Tuition, moradia e comprovação financeira, com folga.</p></div>
+  </div>
+  <div class="grid g2" style="margin-top:18px" id="goalGrid"></div>
+</section>
+
+<!-- CURSOS -->
+<section id="cursos">
+  <div class="eyebrow">Parte 7</div>
+  <h2>🎓 Qual curso escolher?</h2>
+  <p class="sub">A regra: <b>barato + emprego + PGWP elegível + possibilidade de crescimento</b>. Um curso CAD 500 mais barato pode ser pior se não der PGWP.</p>
+  <div class="grid g2">
+    <div class="card">
+      <span class="tag">Mais barato</span>
+      <h3 style="margin-top:8px">Programa elegível em Miramichi</h3>
+      <p>Cidade pequena na NBCC, vários programas técnicos e Business Administration: Management com entrada em 2027. Prioridade quando o dinheiro manda.</p>
+    </div>
+    <div class="card">
+      <span class="tag b">Melhor para tecnologia</span>
+      <h3 style="margin-top:8px">IT: Software Development</h3>
+      <p>Oferecido em Fredericton, Moncton e Saint John. Programação, bancos de dados, web e análise. Cidade possivelmente mais cara que Miramichi.</p>
+    </div>
+  </div>
+  <h3 style="margin:26px 0 10px">Áreas da NBCC na lista de elegibilidade ao PGWP</h3>
+  <div class="chips">
+    <span class="chip">🛡️ Cybersecurity</span><span class="chip">💻 Software Development</span><span class="chip">🌐 Network Administration</span>
+    <span class="chip">📊 Business Analysis</span><span class="chip">📈 Business and Advanced Analytics</span>
+    <span class="chip">⚡ Electrical Eng. Technology</span><span class="chip">⚙️ Mechanical Eng. Technology</span>
+    <span class="chip">🏗️ Civil Eng. Technology</span><span class="chip">🌱 Environmental Technology</span>
+    <span class="chip">📦 Supply Chain &amp; Logistics</span><span class="chip">🔥 Welding</span><span class="chip">🔧 Industrial Mechanics</span>
+  </div>
+  <p class="sub" style="margin-top:10px">A lista muda — sempre confira a página de elegibilidade da própria NBCC.</p>
+
+  <h3 style="margin:26px 0 10px">Ordem de prioridade na decisão</h3>
+  <div class="flow">
+    <span class="s">1º 💰 Preço total</span><span class="a">›</span><span class="s">2º 🎓 PGWP</span><span class="a">›</span><span class="s">3º 💼 Empregabilidade</span><span class="a">›</span>
+    <span class="s">4º 🏙️ Custo da cidade</span><span class="a">›</span><span class="s">5º 🏫 Qualidade</span><span class="a">›</span><span class="s">6º 📘 Curso</span><span class="a">›</span><span class="s">7º 🎁 Bolsas</span>
+  </div>
+</section>
+
+<!-- COMPARADOR -->
+<section id="colleges">
+  <div class="eyebrow">Parte 8</div>
+  <h2>📋 Comparador de colleges</h2>
+  <p class="sub">A próxima etapa é pesquisar 10–15 colleges. Preencha aqui; a linha da NBCC já está de exemplo. Salva automaticamente.</p>
+  <div style="margin-bottom:10px;display:flex;gap:8px;flex-wrap:wrap">
+    <button class="btn sm" id="addRow">+ Adicionar college</button>
+    <button class="btn ghost sm" id="expCsv">Exportar CSV</button>
+  </div>
+  <div class="tw"><table id="colTable"></table></div>
+  <p class="sub" style="margin-top:10px">Dica: ordene mentalmente pelo <b>custo anual total</b> (tuition + vida + aluguel) e só avance com quem tiver DLI + PGWP confirmados.</p>
+</section>
+
+<!-- ROTEIRO -->
+<section id="roteiro">
+  <div class="eyebrow">Parte 9</div>
+  <h2>🗺️ Roteiro passo a passo</h2>
+  <p class="sub">Do Brasil até o trabalho qualificado no Canadá.</p>
+  <div class="tl" id="timeline"></div>
+</section>
+
+<!-- DOCS -->
+<section id="docs">
+  <div class="eyebrow">Parte 10</div>
+  <h2>📄 Checklist de documentos</h2>
+  <p class="sub">Cada um marca o seu. O progresso fica salvo neste navegador.</p>
+  <div class="grid g2">
+    <div class="card"><h3>👤 Rafael <span class="tag" id="pr_rafael">0%</span></h3><div class="pbar" style="margin:8px 0 12px"><div id="pb_rafael"></div></div><ul class="ck" id="ck_rafael"></ul></div>
+    <div class="card"><h3>👤 Eric <span class="tag" id="pr_eric">0%</span></h3><div class="pbar" style="margin:8px 0 12px"><div id="pb_eric"></div></div><ul class="ck" id="ck_eric"></ul></div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="eyebrow">Parte 11</div>
+  <h2>❓ Perguntas frequentes</h2>
+  <details><summary>Miramichi é a cidade mais barata do Canadá?</summary><p>Não dá para afirmar isso. O que sabemos é que a NBCC tem tuition baixa entre os colleges públicos e que Miramichi é uma cidade pequena onde ela oferece programas. É a primeira a investigar, não uma verdade comprovada.</p></details>
+  <details><summary>Preciso de IELTS?</summary><p>Os colleges exigem prova de inglês aceita, normalmente IELTS ou TOEFL, com nota mínima que varia por programa. Veja o requisito do curso escolhido.</p></details>
+  <details><summary>O que é DLI?</summary><p>Designated Learning Institution: escola aprovada pelo governo para receber estudantes internacionais. Sem ela, não há Study Permit.</p></details>
+  <details><summary>O que é PGWP?</summary><p>Post-Graduation Work Permit: permissão de trabalho depois de formado. Depende da instituição, do programa e das regras vigentes.</p></details>
+  <details><summary>O que é PAL/TAL?</summary><p>Carta de atestação provincial/territorial que, quando aplicável, deve acompanhar o pedido de Study Permit. Confirme com a NBCC se ela é exigida no seu caso.</p></details>
+  <details><summary>O que é SIN?</summary><p>Social Insurance Number: número necessário para trabalhar e receber pagamentos no Canadá. Tira-se depois da chegada.</p></details>
+  <details><summary>Posso depender do salário para pagar tudo?</summary><p>Não para o visto. O salário só ajuda depois de chegar. Faça a conta fechar sem ele.</p></details>
+  <details><summary>Devo escolher só pelo preço?</summary><p>Não. Pese PGWP, empregabilidade e custo da cidade. Um curso barato sem PGWP pode sair caro no longo prazo.</p></details>
+</section>
+
+<section id="fontes">
+  <div class="eyebrow">Fontes oficiais</div>
+  <h2>🔗 Onde confirmar tudo</h2>
+  <div class="grid g3">
+    <div class="card"><h3>NBCC — Tuition &amp; Fees</h3><p><a target="_blank" rel="noopener" href="https://nbcc.ca/tuition-fees">nbcc.ca/tuition-fees</a></p></div>
+    <div class="card"><h3>NBCC — PGWP eligibility</h3><p><a target="_blank" rel="noopener" href="https://nbcc.ca/admissions/ircc/pgwp-program-eligibility">nbcc.ca/admissions/ircc/pgwp-program-eligibility</a></p></div>
+    <div class="card"><h3>NBCC — Datas e pagamentos internacionais</h3><p><a target="_blank" rel="noopener" href="https://nbcc.ca/admissions/how-to-apply/international/important-dates-and-timelines">nbcc.ca/…/important-dates-and-timelines</a></p></div>
+    <div class="card"><h3>IRCC — Prova financeira</h3><p><a target="_blank" rel="noopener" href="https://www.canada.ca/en/immigration-refugees-citizenship/services/study-canada/study-permit/get-documents/financial-support.html">canada.ca — financial support</a></p></div>
+    <div class="card"><h3>IRCC — Lista de DLI</h3><p><a target="_blank" rel="noopener" href="https://www.canada.ca/en/immigration-refugees-citizenship/services/study-canada/study-permit/prepare/designated-learning-institutions-list.html">canada.ca — DLI list</a></p></div>
+    <div class="card"><h3>IRCC — Trabalho fora do campus</h3><p><a target="_blank" rel="noopener" href="https://www.canada.ca/en/immigration-refugees-citizenship/services/study-canada/work/work-off-campus.html">canada.ca — work off campus</a></p></div>
+  </div>
+</section>
+</main>
+
+<footer>🍁 Projeto Canadá — Rafael &amp; Eric · dados de 20/10/2026 · estimativas para planejamento, não são orçamento oficial nem aconselhamento de imigração.</footer>
+</div>
+
+<script>
+/* ========== helpers ========== */
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const store={get(k,d){try{const v=localStorage.getItem('rce_'+k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem('rce_'+k,JSON.stringify(v))}catch(e){}}};
+const brl=n=>'R$ '+Math.round(n).toLocaleString('pt-BR');
+const cad=n=>'CAD '+Math.round(n).toLocaleString('pt-BR');
+
+/* ========== login ========== */
+const PASSWORD='rafoneric';
+function unlock(){ $('#lock').classList.add('hidden'); $('#app').classList.remove('hidden'); init(); }
+function unlockIfPasswordMatches(){
+  if($('#pw').value!==PASSWORD)return false;
+  try{sessionStorage.setItem('rce_ok','1')}catch(x){}
+  unlock();
+  return true;
+}
+$('#pw').addEventListener('input',()=>{
+  $('#err').textContent='';
+  unlockIfPasswordMatches();
+});
+$('#lockForm').addEventListener('submit',e=>{
+  e.preventDefault();
+  if(!unlockIfPasswordMatches()){
+    $('#err').textContent='Senha incorreta. Tente de novo.';
+    $('.lockbox').classList.remove('shake');void $('.lockbox').offsetWidth;$('.lockbox').classList.add('shake');
+    $('#pw').value='';
+  }
+});
+$('#logout').onclick=()=>{try{sessionStorage.removeItem('rce_ok')}catch(x){} location.reload()};
+try{ if(sessionStorage.getItem('rce_ok')==='1'){ document.addEventListener('DOMContentLoaded',unlock); if(document.readyState!=='loading')unlock(); } }catch(x){}
+
+/* ========== theme ========== */
+function setTheme(t){document.documentElement.setAttribute('data-theme',t);$('#theme').textContent=t==='light'?'🌙':'☀️';store.set('theme',t)}
+$('#theme').onclick=()=>setTheme(document.documentElement.getAttribute('data-theme')==='light'?'dark':'light');
+setTheme(store.get('theme','dark'));
+
+/* ========== state ========== */
+const DEF={rate:3.57,tuition:10260,exp:620,rent:1600,months:12,imm:335,flight:0,buf:10};
+let C=Object.assign({},DEF,store.get('calc',{}));
+const EXP_DEF=[['🍝 Alimentação',300],['🚌 Transporte',70],['📱 Celular',40],['🌐 Internet',25],['🧴 Higiene / pessoal',40],['📚 Material / estudos',30],['👕 Roupas / outros',35],['🎮 Lazer',30],['🧯 Imprevistos',50]];
+let EXP=store.get('exp',{rafael:EXP_DEF.map(x=>[...x]),eric:EXP_DEF.map(x=>[...x])});
+let expPerson='rafael', calcView='rafael';
+const expTotal=p=>EXP[p].reduce((a,r)=>a+(+r[1]||0),0);
+
+/* ========== calculator ========== */
+function bindCalc(){
+  const map={c_rate:'rate',c_tuition:'tuition',c_exp:'exp',c_rent:'rent',c_months:'months',c_imm:'imm',c_flight:'flight',c_buf:'buf'};
+  Object.entries(map).forEach(([id,k])=>{
+    const el=$('#'+id); el.value=C[k];
+    el.addEventListener('input',()=>{C[k]=parseFloat(el.value)||0; if(k==='buf')$('#c_buf_l').textContent=C.buf; store.set('calc',C); renderAll();});
+  });
+  $('#c_buf_l').textContent=C.buf;
+  $('#c_reset').onclick=()=>{C=Object.assign({},DEF);store.set('calc',C);Object.entries(map).forEach(([id,k])=>$('#'+id).value=C[k]);$('#c_buf_l').textContent=C.buf;renderAll()};
+  $$('#calcTabs button').forEach(b=>b.onclick=()=>{$$('#calcTabs button').forEach(x=>x.classList.remove('on'));b.classList.add('on');calcView=b.dataset.v;renderCalc()});
+}
+function personCost(p){
+  const exp=(p?expTotal(p):C.exp)*C.months;
+  const rent=C.rent/2*C.months;
+  const tuition=C.tuition, imm=C.imm;
+  const sub=tuition+exp+rent+imm;
+  const buf=sub*C.buf/100;
+  return {tuition,exp,rent,imm,sub,buf,total:sub+buf,flightBRL:C.flight};
+}
+function renderCalc(){
+  const mk=(c,n)=>({tuition:c.tuition*n,exp:c.exp*n,rent:c.rent*n,imm:c.imm*n,buf:c.buf*n,total:c.total*n,flight:c.flightBRL*n});
+  let pc;
+  if(calcView==='both'){const a=personCost('rafael'),b=personCost('eric');
+    pc={tuition:a.tuition+b.tuition,exp:a.exp+b.exp,rent:a.rent+b.rent,imm:a.imm+b.imm,buf:a.buf+b.buf,total:a.total+b.total,flight:a.flightBRL+b.flightBRL};}
+  else pc=mk(personCost(calcView),1);
+  const totBRL=pc.total*C.rate+pc.flight;
+  $('#calcOut').innerHTML=`
+   <h3>${calcView==='both'?'Rafael + Eric':calcView==='rafael'?'Rafael':'Eric'} — 1º ano</h3>
+   <div class="result-row"><span>🎓 Tuition</span><b>${cad(pc.tuition)}</b></div>
+   <div class="result-row"><span>🧾 Despesas sem aluguel (${C.months} meses)</span><b>${cad(pc.exp)}</b></div>
+   <div class="result-row"><span>🏠 Aluguel (parte)</span><b>${cad(pc.rent)}</b></div>
+   <div class="result-row"><span>📄 Imigração + candidatura</span><b>${cad(pc.imm)}</b></div>
+   <div class="result-row"><span>🛟 Margem de segurança (${C.buf}%)</span><b>${cad(pc.buf)}</b></div>
+   <div class="result-row total"><span>Total em CAD</span><b>${cad(pc.total)}</b></div>
+   <div class="result-row"><span>✈️ Passagem (R$)</span><b>${brl(pc.flight)}</b></div>
+   <div class="result-row total"><span>TOTAL EM REAIS</span><b>${brl(totBRL)}</b></div>
+   <div class="result-row"><span>Sem aluguel (tuition + despesas)</span><b>${brl((pc.tuition+pc.exp)*C.rate)}</b></div>`;
+  const items=[['Tuition',pc.tuition],['Despesas',pc.exp],['Aluguel',pc.rent],['Imigração',pc.imm],['Margem',pc.buf]];
+  const mx=Math.max(...items.map(i=>i[1]),1);
+  $('#calcBars').innerHTML='<h3>Para onde vai o dinheiro</h3>'+items.map(([n,v])=>`<div class="brow"><span>${n}</span><div class="bt"><i style="width:${v/mx*100}%"></i></div><b>${cad(v)}</b></div>`).join('');
+}
+
+/* ========== expenses ========== */
+function renderExp(){
+  const rows=EXP[expPerson];
+  $('#expTable').innerHTML=`<thead><tr><th>Despesa</th><th class="num">CAD/mês</th><th class="num">R$/mês</th></tr></thead><tbody>`+
+   rows.map((r,i)=>`<tr><td>${r[0]}</td><td class="num"><input type="number" data-i="${i}" value="${r[1]}" style="width:110px;text-align:right"></td><td class="num">${brl(r[1]*C.rate)}</td></tr>`).join('')+
+   `</tbody><tfoot><tr><td>TOTAL</td><td class="num">${cad(expTotal(expPerson))}</td><td class="num">${brl(expTotal(expPerson)*C.rate)}</td></tr></tfoot>`;
+  $$('#expTable input').forEach(inp=>inp.onchange=()=>{EXP[expPerson][inp.dataset.i][1]=parseFloat(inp.value)||0;store.set('exp',EXP);renderAll()});
+  const r=expTotal('rafael'),e=expTotal('eric');
+  $('#expSum').innerHTML=`
+   <div class="card stat"><div class="n">${cad(r)}</div><div class="l">Rafael / mês · ${brl(r*C.rate)}</div></div>
+   <div class="card stat"><div class="n">${cad(e)}</div><div class="l">Eric / mês · ${brl(e*C.rate)}</div></div>
+   <div class="card stat"><div class="n">${cad(r+e)}</div><div class="l">Os dois / mês · ${brl((r+e)*C.rate)} (sem aluguel)</div></div>`;
+}
+$$('#expTabs button').forEach(b=>b.onclick=()=>{$$('#expTabs button').forEach(x=>x.classList.remove('on'));b.classList.add('on');expPerson=b.dataset.p;renderExp()});
+
+/* ========== work ========== */
+function renderWork(){
+  const r=parseFloat($('#w_rate').value)||0,h=parseInt($('#w_h').value),n=parseInt($('#w_net').value);
+  $('#w_h_l').textContent=h;$('#w_net_l').textContent=n;
+  const mGross=r*h*4.33, mNet=mGross*n/100, yr=mNet*8; // ~8 meses de aulas, estimativa
+  $('#workOut').innerHTML=`
+   <h3>Resultado da simulação</h3>
+   <div class="result-row"><span>Bruto por semana</span><b>${cad(r*h)}</b></div>
+   <div class="result-row"><span>Bruto por mês (× 4,33)</span><b>${cad(mGross)}</b></div>
+   <div class="result-row"><span>Líquido estimado / mês</span><b>${cad(mNet)}</b></div>
+   <div class="result-row"><span>Líquido em reais / mês</span><b>${brl(mNet*C.rate)}</b></div>
+   <div class="result-row total"><span>Cobre quanto das despesas sem aluguel?</span><b>${Math.min(999,Math.round(mNet/Math.max(C.exp,1)*100))}%</b></div>
+   <div class="result-row"><span>Cobre quanto do aluguel (sua metade)?</span><b>${Math.min(999,Math.round(mNet/Math.max(C.rent/2,1)*100))}%</b></div>`;
+}
+['w_rate','w_h','w_net'].forEach(id=>$('#'+id).addEventListener('input',renderWork));
+
+/* ========== goals ========== */
+let G=store.get('goals',{rafael:{saved:0,target:100000,months:24},eric:{saved:0,target:100000,months:24}});
+function renderGoals(){
+  $('#goalGrid').innerHTML=['rafael','eric'].map(p=>{
+    const g=G[p],pct=Math.min(100,g.saved/Math.max(g.target,1)*100),left=Math.max(0,g.target-g.saved),m=left/Math.max(g.months,1);
+    return `<div class="card"><h3>${p==='rafael'?'Rafael':'Eric'} — planejador</h3>
+     <div class="field"><label>Já guardado (R$)</label><input type="number" data-p="${p}" data-k="saved" value="${g.saved}"></div>
+     <div class="field"><label>Meta (R$)</label><input type="number" data-p="${p}" data-k="target" value="${g.target}"></div>
+     <div class="field"><label>Meses até embarcar</label><input type="number" data-p="${p}" data-k="months" value="${g.months}" min="1"></div>
+     <div class="pbar"><div style="width:${pct}%"></div></div>
+     <div class="result-row"><span>Progresso</span><b>${pct.toFixed(1)}%</b></div>
+     <div class="result-row total"><span>Guardar por mês</span><b>${brl(m)}</b></div>
+     <div class="result-row"><span>Faltam</span><b>${brl(left)}</b></div></div>`;
+  }).join('');
+  $$('#goalGrid input').forEach(i=>i.onchange=()=>{G[i.dataset.p][i.dataset.k]=parseFloat(i.value)||0;store.set('goals',G);renderGoals()});
+}
+
+/* ========== colleges ========== */
+const COLS=['College','Cidade','Curso','Tuition/ano (CAD)','Duração','DLI?','PGWP?','IELTS','Bolsa','Obs.'];
+let COL=store.get('colleges',[['NBCC','Miramichi (a confirmar)','Programa elegível ao PGWP','10260','a confirmar','sim (verificar)','verificar por programa','a confirmar','a pesquisar','Tuition geral 2026–27']]);
+function renderCol(){
+  $('#colTable').innerHTML='<thead><tr>'+COLS.map(c=>`<th>${c}</th>`).join('')+'<th></th></tr></thead><tbody>'+
+   COL.map((r,i)=>'<tr>'+COLS.map((c,j)=>`<td><input data-i="${i}" data-j="${j}" value="${String(r[j]||'').replace(/"/g,'&quot;')}"></td>`).join('')+`<td><button class="btn ghost sm" data-del="${i}">✕</button></td></tr>`).join('')+'</tbody>';
+  $$('#colTable input').forEach(i=>i.onchange=()=>{COL[i.dataset.i][i.dataset.j]=i.value;store.set('colleges',COL)});
+  $$('#colTable [data-del]').forEach(b=>b.onclick=()=>{COL.splice(+b.dataset.del,1);store.set('colleges',COL);renderCol()});
+}
+$('#addRow').onclick=()=>{COL.push(COLS.map(()=>''));store.set('colleges',COL);renderCol()};
+$('#expCsv').onclick=()=>{
+  const csv=[COLS,...COL].map(r=>r.map(c=>'"'+String(c||'').replace(/"/g,'""')+'"').join(',')).join('\n');
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\ufeff'+csv],{type:'text/csv'}));a.download='colleges.csv';a.click();
+};
+
+/* ========== timeline ========== */
+const TL=[
+ ['1. Inglês','Estudar de forma constante e escolher a prova aceita (IELTS ou TOEFL), conforme o requisito do programa.'],
+ ['2. Pesquisa de colleges','Montar o comparador com 10–15 opções, começando por New Brunswick. Descartar quem não for DLI.'],
+ ['3. Conferir PGWP','Verificar college + programa + regra atual antes de se apaixonar por um curso barato.'],
+ ['4. Juntar documentos','Passaporte, histórico escolar, certificados, traduções e comprovantes.'],
+ ['5. Candidatura','Aplicar (taxa NBCC CAD 100) e acompanhar prazos e exigências do programa.'],
+ ['6. Letter of Acceptance','Receber a carta e pagar os depósitos da primeira parcela (CAD 1.500 + 4.750 na NBCC, conforme regras vigentes).'],
+ ['7. PAL/TAL','Se aplicável à província, obter a carta de atestação antes do pedido do visto.'],
+ ['8. Study Permit','Pedido no IRCC com prova financeira (CAD 23.448 de manutenção por pessoa + tuition), taxa CAD 150 e biometria CAD 85.'],
+ ['9. Chegada e moradia','Alugar junto, dividindo o apartamento. Abrir conta, chip e transporte.'],
+ ['10. SIN e trabalho','Tirar o SIN e procurar trabalho de até 24 h/semana nos períodos de aula.'],
+ ['11. Estágio / co-op','Aproveitar estágios quando o programa oferecer.'],
+ ['12. Formatura e PGWP','Se elegível, pedir a permissão pós-graduação e buscar trabalho qualificado.']
+];
+$('#timeline').innerHTML=TL.map(([t,d])=>`<div class="tli"><h3>${t}</h3><p>${d}</p></div>`).join('');
+
+/* ========== checklist ========== */
+const DOCS=[
+ ['Identidade','RG','CPF','Certidão de nascimento','Passaporte válido'],
+ ['Escola','Histórico escolar','Declaração / certificado de conclusão','Notas e documentos pedidos pelo college'],
+ ['Inglês','IELTS / TOEFL ou teste aceito'],
+ ['Candidatura','Formulário preenchido','Personal statement (se exigido)','Currículo (se solicitado)','Cartas de recomendação (se solicitadas)'],
+ ['Imigração','Letter of Acceptance de DLI','PAL/TAL (se aplicável)','Prova financeira','Formulários do IRCC','Biometria','Fotos e documentos pessoais'],
+ ['Viagem','Passagem','Seguro-saúde','Reserva de moradia inicial']
+];
+let CK=store.get('ck',{rafael:{},eric:{}});
+function renderCk(){
+  ['rafael','eric'].forEach(p=>{
+    let total=0,done=0,html='';
+    DOCS.forEach(g=>{
+      html+=`<li style="display:block;border:0;padding:12px 0 2px"><b style="color:var(--txt)">${g[0]}</b></li>`;
+      g.slice(1).forEach(it=>{
+        const k=g[0]+'|'+it,on=!!CK[p][k];total++;if(on)done++;
+        html+=`<li class="${on?'done':''}"><input type="checkbox" data-p="${p}" data-k="${k}" ${on?'checked':''}><span>${it}</span></li>`;
+      });
+    });
+    $('#ck_'+p).innerHTML=html;
+    const pc=Math.round(done/total*100);
+    $('#pr_'+p).textContent=pc+'%';$('#pb_'+p).style.width=pc+'%';
+  });
+  $$('.ck input').forEach(i=>i.onchange=()=>{CK[i.dataset.p][i.dataset.k]=i.checked;store.set('ck',CK);renderCk()});
+}
+
+/* ========== global render ========== */
+function renderAll(){
+  $('#heroBRL').textContent=brl(10260*C.rate);
+  $('#t1').textContent=brl(10260*C.rate);
+  $('#t2').textContent=brl(10260*C.rate/12);
+  $('#appBRL').textContent=brl(200*C.rate);
+  const proof=10260+23448;
+  $('#proofCAD').textContent=cad(proof);
+  $('#proofBRL').textContent=brl(proof*C.rate);
+  $('#proofBoth').textContent=brl(proof*2*C.rate);
+  renderCalc();renderExp();renderWork();
+}
+
+/* ========== nav highlight ========== */
+function spy(){
+  const ids=$$('#links a').map(a=>a.getAttribute('href').slice(1));let cur=ids[0];
+  ids.forEach(id=>{const el=document.getElementById(id);if(el&&el.getBoundingClientRect().top<140)cur=id});
+  $$('#links a').forEach(a=>a.classList.toggle('act',a.getAttribute('href')==='#'+cur));
+}
+window.addEventListener('scroll',spy,{passive:true});
+
+let inited=false;
+function init(){
+  if(inited)return;inited=true;
+  bindCalc();renderGoals();renderCol();renderCk();renderAll();spy();
+}
+</script>
+</body>
+</html>
